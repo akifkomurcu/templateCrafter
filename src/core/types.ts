@@ -47,6 +47,11 @@ export interface AppState {
   initialStickerX: number;
   initialStickerY: number;
   
+  // Canvas View
+  canvasScale: number;
+  canvasPanX: number;
+  canvasPanY: number;
+  
   // History
   undoStack: string[];
   redoStack: string[];

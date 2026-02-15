@@ -25,25 +25,38 @@ export function getCanvasContext() {
 // ============================================================
 export function renderCanvas() {
   const viewport = document.getElementById('slides-viewport');
-  if (!viewport) return;
+  const transformRoot = document.getElementById('canvas-transform-root');
+  if (!viewport || !transformRoot) return;
+  
+  // Initialize Viewport Events (Once)
+  if (!viewport.dataset.eventsMetrics) {
+    viewport.dataset.eventsMetrics = 'true';
+    initViewportEvents(viewport);
+  }
   
   const preset = DEVICE_PRESETS[state.devicePreset];
   
-  // Calculate display size for each slide
-  const canvasArea = document.getElementById('canvas-area');
-  const areaH = (canvasArea?.clientHeight || 600) - 100;
-  const aspectRatio = preset.width / preset.height;
   
   // Height-based sizing: fit slides to available height
-  const displayH = Math.min(areaH, 500);
+  // Use a fixed base height or available height, but we want it to be scrollable if zoomed.
+  const baseHeight = 500; 
+  const displayH = baseHeight; 
+  const aspectRatio = preset.width / preset.height;
   const displayW = displayH * aspectRatio;
   
+  // Update Transform Root Style
+  transformRoot.style.transform = `translate(${state.canvasPanX}px, ${state.canvasPanY}px) scale(${state.canvasScale})`;
+  transformRoot.style.transformOrigin = 'center center'; // Or top left? Center is usually better for zoom
+  // Actually standard pan/zoom usually uses top-left origin + offset/scale.
+  // But let's stick to center for simplicity if it works, or switch to 0 0.
+  // Center alignment in CSS flex is already doing centering.
+  
   // Reuse or rebuild canvas elements
-  const existingWrappers = viewport.querySelectorAll('.slide-canvas-wrapper');
+  const existingWrappers = transformRoot.querySelectorAll('.slide-canvas-wrapper');
   
   // Only rebuild DOM if slide count changed
   if (existingWrappers.length !== state.slides.length) {
-    viewport.innerHTML = '';
+    transformRoot.innerHTML = '';
     
     state.slides.forEach((_, index) => {
       const wrapper = document.createElement('div');
@@ -63,19 +76,22 @@ export function renderCanvas() {
         triggerUpdate();
       });
       
-      viewport.appendChild(wrapper);
+      transformRoot.appendChild(wrapper);
     });
   }
   
   // Render each slide onto its canvas
-  const wrappers = viewport.querySelectorAll('.slide-canvas-wrapper');
+  const wrappers = transformRoot.querySelectorAll('.slide-canvas-wrapper');
   wrappers.forEach((wrapper, index) => {
     const w = wrapper as HTMLElement;
     w.className = `slide-canvas-wrapper ${index === state.activeSlideIndex ? 'active' : ''}`;
     
     const cvs = w.querySelector('canvas')!;
-    cvs.width = preset.width;
-    cvs.height = preset.height;
+    // Ensure dimensions match current preset (if changed)
+    if (cvs.width !== preset.width || cvs.height !== preset.height) {
+        cvs.width = preset.width;
+        cvs.height = preset.height;
+    }
     cvs.style.width = displayW + 'px';
     cvs.style.height = displayH + 'px';
     
@@ -86,9 +102,95 @@ export function renderCanvas() {
     drawSlideContent(state.slides[index], preset, index, state.slides.length);
     
     // Update thumbnail for this slide
-    // Timeout ensuring renderSlideStrip has run if called via onUpdate
     setTimeout(() => updateThumbnail(index), 0);
   });
+  
+  // Update Zoom Indicator
+  const zoomInd = document.getElementById('canvas-zoom-indicator');
+  if (zoomInd) {
+    zoomInd.innerText = `${Math.round(state.canvasScale * 100)}%`;
+  }
+}
+
+function initViewportEvents(viewport: HTMLElement) {
+    // Zoom Indicator Reset
+    const zoomInd = document.getElementById('canvas-zoom-indicator');
+    if (zoomInd) {
+        zoomInd.addEventListener('click', () => {
+            state.canvasScale = 1;
+            state.canvasPanX = 0;
+            state.canvasPanY = 0;
+            triggerUpdate();
+        });
+    }
+
+    // Wheel Zoom & Pan
+    viewport.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        
+        // Ctrl + Wheel = Zoom
+        if (e.ctrlKey || e.metaKey) {
+            const zoomSpeed = 0.001;
+            const newScale = state.canvasScale - e.deltaY * zoomSpeed;
+            // Clamp scale
+            state.canvasScale = Math.min(Math.max(0.1, newScale), 5);
+        } else {
+            // Pan
+            state.canvasPanX -= e.deltaX;
+            state.canvasPanY -= e.deltaY;
+        }
+        triggerUpdate();
+    }, { passive: false });
+
+    // Middle Mouse or Space+Drag Pan
+    let isPanning = false;
+    let startX = 0;
+    let startY = 0;
+    let isSpacePressed = false;
+
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && !isSpacePressed) {
+            isSpacePressed = true;
+            viewport.style.cursor = 'grab';
+        }
+    });
+
+    window.addEventListener('keyup', (e) => {
+        if (e.code === 'Space') {
+            isSpacePressed = false;
+            if (!isPanning) viewport.style.cursor = 'default';
+        }
+    });
+    
+    viewport.addEventListener('mousedown', (e) => {
+        if (e.button === 1 || (e.button === 0 && (isSpacePressed || e.shiftKey))) {
+            isPanning = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            viewport.style.cursor = 'grabbing';
+            e.preventDefault(); 
+        }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isPanning) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        
+        state.canvasPanX += dx;
+        state.canvasPanY += dy;
+        
+        startX = e.clientX;
+        startY = e.clientY;
+        triggerUpdate();
+    });
+
+    window.addEventListener('mouseup', () => {
+        if (isPanning) {
+            isPanning = false;
+            viewport.style.cursor = isSpacePressed ? 'grab' : 'default';
+        }
+    });
 }
 
 // ============================================================

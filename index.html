@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ScreenCraft – App Store Screenshot Generator</title>
+  <title>Template Crafter – App Store Screenshot Generator</title>
   <meta name="description" content="Create professional App Store & Google Play screenshots from one responsive design. Free, fast, no account needed." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
         <button class="topbar__btn icon-btn" id="btn-back" title="Back">
           <span class="material-symbols-rounded">arrow_back</span>
         </button>
-        <span class="topbar__project-name">ScreenCraft Project</span>
+        <span class="topbar__project-name">Template Crafter</span>
       </div>
 
       <div class="topbar__center">
@@ -147,7 +147,7 @@
 
       <!-- Right Area: Screenshot Strip + Canvas -->
       <div class="editor-main">
-        <!-- Horizontal Screenshot Strip -->
+        <!-- Horizontal Screenshot Strip (Now at Top) -->
         <div class="screenshot-strip" id="screenshot-strip">
           <div class="screenshot-strip__list" id="slide-list">
             <!-- Slides injected here -->
@@ -157,6 +157,19 @@
             <span>Add</span>
           </button>
         </div>
+
+        <div id="slides-viewport">
+          <div id="canvas-transform-root">
+            <!-- Canvas elements will be injected here -->
+          </div>
+        </div>
+        
+        <div id="floating-toolbar">
+          <!-- Injected by JS -->
+        </div>
+        
+        <!-- Canvas/View Zoom Indicator -->
+        <div id="canvas-zoom-indicator">100%</div>
 
         <!-- Canvas Area -->
         <section class="canvas-area" id="canvas-area">

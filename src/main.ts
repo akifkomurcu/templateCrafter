@@ -18,6 +18,7 @@ import {
   renderInlineBgPanel, 
   updatePropertiesPanel 
 } from './components/Sidebar';
+import { renderToolbar } from './components/Toolbar';
 import { initExport } from './components/Export';
 import { 
   handleCanvasMouseDown, 
@@ -42,6 +43,7 @@ setCallbacks(
     renderSlideStrip();    // Bottom thumbnails
     renderInlineBgPanel(); // Left panel (backgrounds)
     updatePropertiesPanel(); // Right panel (contextual)
+    renderToolbar(); // Bottom floating toolbar
   },
   // History Change Callback
   (canUndo, canRedo) => {

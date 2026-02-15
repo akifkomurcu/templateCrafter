@@ -1,5 +1,5 @@
 /* ============================================================
-   DESIGN SYSTEM – ScreenCraft
+   DESIGN SYSTEM – Template Crafter
    ============================================================ */
 
 :root {
@@ -1682,4 +1682,165 @@ kbd {
 .image-preset.active {
   border-color: var(--c-primary);
   box-shadow: 0 0 0 2px var(--c-primary-glow);
+}
+
+/* ============================================================ */
+/* FLOATING TOOLBAR                                             */
+/* ============================================================ */
+#floating-toolbar {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(22, 22, 30, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+  opacity: 0;
+  transform: translate(-50%, 20px);
+  pointer-events: none;
+}
+
+#floating-toolbar.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 16px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.toolbar-group:last-child {
+  padding-right: 0;
+  border-right: none;
+}
+
+.toolbar-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--c-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toolbar-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--c-text);
+}
+
+.toolbar-btn.active {
+  background: var(--c-primary);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.toolbar-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+  font-weight: 500;
+}
+
+.toolbar-slider {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  outline: none;
+}
+
+.toolbar-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  border: 2px solid var(--c-bg);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.1s;
+}
+
+.toolbar-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+/* ============================================================ */
+/* CANVAS ZOOM & PAN                                            */
+/* ============================================================ */
+#slides-viewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  background-image: 
+    radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+#canvas-transform-root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px; /* Space between slides */
+  transform-origin: center center;
+  transition: transform 0.05s ease-out; /* Slight smooth but responsive */
+  padding: 100px;
+}
+
+#slides-viewport:active {
+  cursor: grabbing;
+}
+
+/* ============================================================ */
+/* CANVAS ZOOM INDICATOR                                        */
+/* ============================================================ */
+#canvas-zoom-indicator {
+  position: absolute;
+  top: 96px; /* Below top bar */
+  right: 24px;
+  background: rgba(22, 22, 30, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 50;
+  user-select: none;
+}
+
+#canvas-zoom-indicator:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--c-text);
 }

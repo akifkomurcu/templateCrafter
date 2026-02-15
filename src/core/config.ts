@@ -43,12 +43,29 @@ export const TEMPLATE_COLORS = [
 ];
 
 export const PRESET_BACKGROUNDS = [
+  // 1. ABSTRACT & GRADIENTS
   'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&q=80', // Gradient
   'https://images.unsplash.com/photo-1614850523296-6313a96a1936?w=800&q=80', // Mesh
-  'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80', // Watercolor
+  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80', // Abstract Fluid
+  'https://images.unsplash.com/photo-1614851099511-773084f6911d?w=800&q=80', // Purple Mesh
+  'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&q=80', // Fluid Pink
+  'https://images.unsplash.com/photo-1634152962476-4b8a00e1915c?w=800&q=80', // Dark Gradient
+  
+  // 2. MINIMAL & TEXTURE
   'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800&q=80', // Space
   'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=800&q=80', // Purple
-  'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&q=80', // Fluid
+  'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=800&q=80', // Minimal Gold
+  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80', // Beach
+  'https://images.unsplash.com/photo-1519681393798-3828fb4090bb?w=800&q=80', // Mountains
+  'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=800&q=80', // Dark Minimal
+  
+  // 3. NATURE & SCENIC
+  'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&q=80', // Green Nature
+  'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80', // Foggy Forest
+  'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80', // Forest Light
+  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80', // Yosemite
+  'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=800&q=80', // Autumn Road
+  'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80', // Lake & User
 ];
 
 export const STICKER_EMOJIS = [

@@ -20,6 +20,11 @@ export const state: AppState = {
   initialStickerX: 0,
   initialStickerY: 0,
   
+  // Canvas View
+  canvasScale: 1,
+  canvasPanX: 0,
+  canvasPanY: 0,
+  
   undoStack: [],
   redoStack: []
 };
