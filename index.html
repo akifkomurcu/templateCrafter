@@ -160,8 +160,8 @@
 
         <!-- Canvas Area -->
         <section class="canvas-area" id="canvas-area">
-          <div class="canvas-container" id="canvas-container">
-            <canvas id="main-canvas"></canvas>
+          <div class="slides-viewport" id="slides-viewport">
+            <!-- Canvases are created dynamically -->
           </div>
         </section>
       </div>
@@ -193,3 +193,53 @@
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
+
+<!-- Export Modal -->
+<div class="modal-overlay" id="export-modal">
+  <div class="modal" style="max-width: 500px;">
+    <div class="modal-header">
+      <h3 class="modal-title">Export Screenshots</h3>
+      <button class="icon-btn" id="close-export-modal"><span class="material-symbols-rounded">close</span></button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--c-text-secondary); margin-bottom:var(--sp-4);">
+        Generate submission-ready screenshots for all selected sizes in one click.
+      </p>
+      
+      <div class="device-selection-group">
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="export-apple-iphone" checked>
+          <div class="checkbox-label">
+            <span class="label-title">Apple iPhones</span>
+            <span class="label-desc">6.7" (1290x2796), 6.5" (1284x2778), 5.5" (1242x2208)</span>
+          </div>
+        </label>
+        
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="export-apple-ipad" checked>
+          <div class="checkbox-label">
+            <span class="label-title">Apple iPads</span>
+            <span class="label-desc">12.9" (2048x2732), 11" (1668x2388)</span>
+          </div>
+        </label>
+        
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="export-android">
+          <div class="checkbox-label">
+            <span class="label-title">Android</span>
+            <span class="label-desc">Phone (1080x1920)</span>
+          </div>
+        </label>
+      </div>
+      
+      <div class="export-progress" id="export-progress" style="display:none; margin-top:20px;">
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:0%"></div></div>
+        <div class="progress-text" style="text-align:center; margin-top:8px; font-size:12px; color:var(--c-text-secondary);">Preparing...</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="cancel-export">Cancel</button>
+      <button class="btn-primary" id="start-export">Download ZIP</button>
+    </div>
+  </div>
+</div>
