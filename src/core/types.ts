@@ -4,10 +4,12 @@ export interface SlideData {
   titleColor: string;
   titleSize: number;
   titleAlign: CanvasTextAlign;
+  titlePos: { x: number; y: number } | null;
   
   subtitle: string;
   subtitleColor: string;
   subtitleSize: number;
+  subtitlePos: { x: number; y: number } | null;
   
   bgType: 'solid' | 'gradient' | 'image';
   bgColor: string;
@@ -20,6 +22,7 @@ export interface SlideData {
   showDevice: boolean;
   deviceOffsetY: number;
   deviceScale: number;
+  devicePos: { x: number; y: number } | null;
   
   fontFamily: string;
   stickers: StickerData[];
@@ -42,6 +45,7 @@ export interface AppState {
   activePanel: string | null; // 'text', 'background', 'device', 'stickers'
   selectedStickerId: string | null;
   draggingStickerId: string | null;
+  draggingElement: { slideIndex: number, type: 'title' | 'subtitle' | 'device' } | null;
   dragStartX: number;
   dragStartY: number;
   initialStickerX: number;
@@ -51,6 +55,8 @@ export interface AppState {
   canvasScale: number;
   canvasPanX: number;
   canvasPanY: number;
+  snapToCenterX: boolean;
+  snapToCenterY: boolean;
   
   // History
   undoStack: string[];

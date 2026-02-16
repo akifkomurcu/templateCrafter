@@ -11,7 +11,99 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="app">
+  <!-- Landing Page -->
+  <div id="landing-page" class="landing-page">
+    <header class="landing-header">
+      <div class="landing-header-inner">
+        <div class="landing-logo">
+          <span class="landing-logo-icon">✨</span> Template Crafter
+        </div>
+        <nav class="landing-nav">
+          <a href="#" class="landing-nav-link">Features</a>
+          <a href="#" class="landing-nav-link">Showcase</a>
+          <button id="btn-start-nav" class="landing-btn-primary small">Launch Editor</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="landing-hero">
+      <div class="landing-hero-content">
+        <h1 class="landing-title">Create Stunning App Store Screenshots <br> <span class="text-gradient">In Minutes</span></h1>
+        <p class="landing-subtitle">
+          Stop struggling with complex design tools. Generate professional, compliant screenshots for iOS and Android instantly.
+        </p>
+        <div class="landing-actions">
+          <button id="btn-start-hero" class="landing-btn-primary large">
+            <span class="material-symbols-rounded">rocket_launch</span>
+            Start Creating for Free
+          </button>
+          <button class="landing-btn-secondary large">
+            <span class="material-symbols-rounded">play_circle</span>
+            Watch Demo
+          </button>
+        </div>
+        
+        <div class="landing-stats">
+          <div class="stat-item">
+            <span class="stat-value">100%</span>
+            <span class="stat-label">Client-Side</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-value">4k+</span>
+            <span class="stat-label">Export Quality</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-value">0$</span>
+            <span class="stat-label">Free Forever</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="landing-hero-visual">
+         <!-- CSS Grid of mockups will go here via CSS background or dynamic elements -->
+         <div class="hero-card hero-card--main">
+            <div class="hero-card-header">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            </div>
+            <div class="hero-card-preview"></div>
+         </div>
+         <div class="hero-card hero-card--floating float-1">
+            <span class="material-symbols-rounded">bolt</span>
+            <span>Bulk Export</span>
+         </div>
+         <div class="hero-card hero-card--floating float-2">
+            <span class="material-symbols-rounded">devices</span>
+            <span>All Devices</span>
+         </div>
+      </div>
+    </main>
+
+    <section class="landing-features">
+        <div class="feature-card highlighted">
+            <div class="feature-icon"><span class="material-symbols-rounded">download_for_offline</span></div>
+            <h3>Bulk Export</h3>
+            <p>Export all required App Store sizes (6.5", 5.5", 12.9") in a single click. No more manual resizing.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><span class="material-symbols-rounded">smartphone</span></div>
+            <h3>Device Frames</h3>
+            <p>Pre-loaded with accurate iPhone 14 Pro, Pro Max, and iPad frames. Drag, drop, and customize.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><span class="material-symbols-rounded">palette</span></div>
+            <h3>Smart Styling</h3>
+            <p>Global color controls, gradient backgrounds, and smart text layouts that adapt to your content.</p>
+        </div>
+    </section>
+    
+    <footer class="landing-footer">
+        <p>© 2026 AppScreenStudio. Built for developers.</p>
+    </footer>
+  </div>
+
+  <div id="app" style="display: none;">
     <!-- Top Navigation Bar -->
     <header class="topbar">
       <div class="topbar__left">

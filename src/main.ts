@@ -26,6 +26,7 @@ import {
   handleCanvasMouseUp, 
   handleStickerWheel 
 } from './components/Stickers';
+import { initLandingPage } from './components/Landing';
 // import { $ } from './core/utils'; <-- Unused
 
 // ============================================================
@@ -60,6 +61,7 @@ setCallbacks(
 // 2. Initialize Components
 initSidebar();
 initExport();
+initLandingPage();
 
 // 3. Bind Global Interaction Events
 const viewport = document.getElementById('slides-viewport');

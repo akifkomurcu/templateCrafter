@@ -14,7 +14,9 @@ export const state: AppState = {
   showNotch: true,
   activePanel: null,
   selectedStickerId: null,
+  
   draggingStickerId: null,
+  draggingElement: null,
   dragStartX: 0,
   dragStartY: 0,
   initialStickerX: 0,
@@ -24,6 +26,8 @@ export const state: AppState = {
   canvasScale: 1,
   canvasPanX: 0,
   canvasPanY: 0,
+  snapToCenterX: false,
+  snapToCenterY: false,
   
   undoStack: [],
   redoStack: []
@@ -44,6 +48,8 @@ export function createDefaultSlide(): SlideData {
     subtitleSize: 36,
     
     titleAlign: 'center',
+    titlePos: null,
+    subtitlePos: null,
     bgType: 'solid',
     bgColor: TEMPLATE_COLORS[Math.floor(Math.random() * TEMPLATE_COLORS.length)],
     bgGradient: 'linear-gradient(135deg, #7c5cfc 0%, #38bdf8 100%)',
@@ -55,6 +61,7 @@ export function createDefaultSlide(): SlideData {
     showDevice: true,
     deviceOffsetY: 10,
     deviceScale: 85,
+    devicePos: null,
     
     fontFamily: 'Inter',
     stickers: []
