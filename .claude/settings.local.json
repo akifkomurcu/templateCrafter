@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install react@19 react-dom@19 zustand@5 && npm install -D @types/react @types/react-dom @vitejs/plugin-react)",
+      "Bash(cat > /Users/komurcu/Desktop/Projeler/appstore-screenshot-generator/tsconfig.json << 'EOF'\n{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"useDefineForClassFields\": true,\n    \"module\": \"ESNext\",\n    \"lib\": [\"ES2022\", \"DOM\", \"DOM.Iterable\"],\n    \"types\": [\"vite/client\"],\n    \"skipLibCheck\": true,\n\n    \"jsx\": \"react-jsx\",\n\n    \"moduleResolution\": \"bundler\",\n    \"allowImportingTsExtensions\": true,\n    \"verbatimModuleSyntax\": true,\n    \"moduleDetection\": \"force\",\n    \"noEmit\": true,\n\n    \"strict\": true,\n    \"noUnusedLocals\": false,\n    \"noUnusedParameters\": false,\n    \"noFallthroughCasesInSwitch\": true\n  },\n  \"include\": [\"src\"]\n}\nEOF)",
+      "Bash(npx tsc --noEmit 2>&1 | head -80)",
+      "Bash(npx tsc --noEmit 2>&1)",
+      "Bash(npm run build 2>&1)",
+      "Bash(timeout 5 npm run dev 2>&1 || true)",
+      "Bash(npm run dev)",
+      "WebFetch(domain:localhost)",
+      "Bash(curl -s http://localhost:5173/ | head -30)",
+      "Bash(curl -s \"http://localhost:5173/src/main.tsx\" -H \"Accept: application/javascript\" 2>&1 | head -5)",
+      "Bash(curl -s \"http://localhost:5173/src/components/App.tsx\" -H \"Accept: application/javascript\" 2>&1 | head -30)",
+      "Bash(node -e \"\nconst http = require\\('http'\\);\n\n// Fetch the store file and check for obvious issues\nhttp.get\\('http://localhost:5173/src/store/useAppStore.ts', \\(res\\) => {\n  let data = '';\n  res.on\\('data', chunk => data += chunk\\);\n  res.on\\('end', \\(\\) => {\n    // Check if it compiled without issues\n    if \\(data.includes\\('useAppStore'\\) && data.includes\\('create\\('\\)\\) {\n      console.log\\('Store: OK'\\);\n    } else {\n      console.log\\('Store: ISSUE'\\);\n    }\n  }\\);\n}\\);\n\")",
+      "Bash(node -e \"\nconst http = require\\('http'\\);\n\n// Check each critical component\nconst files = [\n  '/src/components/Viewport.tsx',\n  '/src/components/SlideCanvas.tsx',\n  '/src/canvas/drawSlideContent.ts',\n  '/src/store/useAppStore.ts',\n];\n\nlet checked = 0;\nfiles.forEach\\(f => {\n  http.get\\('http://localhost:5173' + f, \\(res\\) => {\n    let data = '';\n    res.on\\('data', c => data += c\\);\n    res.on\\('end', \\(\\) => {\n      const ok = res.statusCode === 200 && !data.includes\\('Error'\\) && !data.includes\\('SyntaxError'\\);\n      console.log\\(f + ': ' + \\(ok ? 'OK' : 'ISSUE \\(status=' + res.statusCode + '\\)'\\)\\);\n      checked++;\n    }\\);\n  }\\);\n}\\);\n\" 2>&1)",
+      "Bash(which npx && node -e \"require\\('playwright'\\)\" 2>/dev/null && echo \"playwright available\" || echo \"playwright not available\")"
+    ]
+  }
+}
