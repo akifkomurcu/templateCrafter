@@ -100,76 +100,95 @@ export function ExportModal() {
   };
 
   return (
-    <div className="modal-overlay open" id="export-modal" style={{ display: 'flex' }}>
-      <div className="modal" style={{ maxWidth: 500 }}>
-        <div className="modal-header">
-          <h3 className="modal-title">Export Screenshots</h3>
-          <button className="icon-btn" id="close-export-modal" onClick={close}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 transition-all duration-300 backdrop-blur-sm bg-black/40">
+      <div className="bg-surface-light dark:bg-surface-dark w-full max-w-lg rounded-3xl shadow-2xl border border-border-light dark:border-border-dark overflow-hidden animate-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between p-6 border-b border-stone-100 dark:border-stone-800">
+          <div>
+            <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50 font-display">Export Screenshots</h3>
+            <p className="text-xs text-stone-400 mt-1 italic font-serif">Generate submission-ready assets.</p>
+          </div>
+          <button 
+            className="w-10 h-10 flex items-center justify-center rounded-xl bg-stone-50 dark:bg-stone-800 text-stone-400 hover:text-stone-800 dark:hover:text-stone-100 transition-colors"
+            onClick={close}
+          >
             <span className="material-symbols-rounded">close</span>
           </button>
         </div>
 
-        <div className="modal-body">
-          <p style={{ color: 'var(--c-text-secondary)', marginBottom: 'var(--sp-4)' }}>
-            Generate submission-ready screenshots for all selected sizes in one click.
+        <div className="p-8 space-y-8">
+          <p className="text-sm text-stone-500 dark:text-stone-400 leading-relaxed font-sans">
+            ScreenCraft will generate professional, high-resolution screenshots for all selected device groups in a single click.
           </p>
 
-          <div className="device-selection-group">
-            <label className="checkbox-wrapper">
+          <div className="space-y-4">
+            <label className="flex items-center gap-4 group cursor-pointer bg-stone-50 dark:bg-stone-900/50 p-4 rounded-2xl border border-stone-100 dark:border-stone-800 transition-all hover:border-primary/30">
               <input
                 type="checkbox"
-                id="export-apple-iphone"
+                className="w-5 h-5 rounded-lg border-stone-300 dark:border-stone-700 text-primary focus:ring-primary cursor-pointer"
                 checked={selectedDevices.iphone}
                 onChange={() => toggleDevice('iphone')}
               />
-              <div className="checkbox-label">
-                <span className="label-title">Apple iPhones</span>
-                <span className="label-desc">6.7" (1290×2796), 6.5" (1284×2778), 5.5" (1242×2208)</span>
+              <div className="flex-1">
+                <span className="block text-sm font-bold text-stone-800 dark:text-stone-200 uppercase tracking-widest leading-none">Apple iPhones</span>
+                <span className="block text-[10px] text-stone-400 mt-1 uppercase tracking-tighter">6.7" (1290×2796), 6.5" (1284×2778), 5.5" (1242×2208)</span>
               </div>
             </label>
 
-            <label className="checkbox-wrapper">
+            <label className="flex items-center gap-4 group cursor-pointer bg-stone-50 dark:bg-stone-900/50 p-4 rounded-2xl border border-stone-100 dark:border-stone-800 transition-all hover:border-primary/30">
               <input
                 type="checkbox"
-                id="export-apple-ipad"
+                className="w-5 h-5 rounded-lg border-stone-300 dark:border-stone-700 text-primary focus:ring-primary cursor-pointer"
                 checked={selectedDevices.ipad}
                 onChange={() => toggleDevice('ipad')}
               />
-              <div className="checkbox-label">
-                <span className="label-title">Apple iPads</span>
-                <span className="label-desc">12.9" (2048×2732), 11" (1668×2388)</span>
+              <div className="flex-1">
+                <span className="block text-sm font-bold text-stone-800 dark:text-stone-200 uppercase tracking-widest leading-none">Apple iPads</span>
+                <span className="block text-[10px] text-stone-400 mt-1 uppercase tracking-tighter">12.9" (2048×2732), 11" (1668×2388)</span>
               </div>
             </label>
 
-            <label className="checkbox-wrapper">
+            <label className="flex items-center gap-4 group cursor-pointer bg-stone-50 dark:bg-stone-900/50 p-4 rounded-2xl border border-stone-100 dark:border-stone-800 transition-all hover:border-primary/30">
               <input
                 type="checkbox"
-                id="export-android"
+                className="w-5 h-5 rounded-lg border-stone-300 dark:border-stone-700 text-primary focus:ring-primary cursor-pointer"
                 checked={selectedDevices.android}
                 onChange={() => toggleDevice('android')}
               />
-              <div className="checkbox-label">
-                <span className="label-title">Android</span>
-                <span className="label-desc">Phone (1080×1920)</span>
+              <div className="flex-1">
+                <span className="block text-sm font-bold text-stone-800 dark:text-stone-200 uppercase tracking-widest leading-none">Android Devices</span>
+                <span className="block text-[10px] text-stone-400 mt-1 uppercase tracking-tighter">Universal (1080×1920)</span>
               </div>
             </label>
           </div>
 
           {progress && (
-            <div className="export-progress" id="export-progress" style={{ marginTop: 20 }}>
-              <div className="progress-bar-bg">
-                <div className="progress-bar-fill" style={{ width: `${progress.pct}%` }} />
+            <div className="space-y-3 animate-in fade-in duration-300">
+              <div className="flex justify-between items-center text-[10px] font-bold text-primary uppercase tracking-widest">
+                <span>{progress.label}</span>
+                <span>{progress.pct}%</span>
               </div>
-              <div className="progress-text" style={{ textAlign: 'center', marginTop: 8, fontSize: 12, color: 'var(--c-text-secondary)' }}>
-                {progress.label}
+              <div className="h-1.5 w-full bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-primary transition-all duration-300 shadow-[0_0_12px_rgba(119,140,125,0.4)]" 
+                  style={{ width: `${progress.pct}%` }} 
+                />
               </div>
             </div>
           )}
         </div>
 
-        <div className="modal-footer">
-          <button className="btn-secondary" id="cancel-export" onClick={close}>Cancel</button>
-          <button className="btn-primary" id="start-export" onClick={handleExport}>
+        <div className="p-6 bg-stone-50 dark:bg-stone-900/30 border-t border-stone-100 dark:border-stone-800 flex items-center justify-end gap-3">
+          <button 
+            className="px-6 py-2.5 rounded-xl text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors text-sm font-bold uppercase tracking-widest"
+            onClick={close}
+          >
+            Cancel
+          </button>
+          <button 
+            className="px-8 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-sm shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all uppercase tracking-widest flex items-center gap-2"
+            onClick={handleExport}
+          >
+            <span className="material-symbols-rounded text-lg">download</span>
             Download ZIP
           </button>
         </div>

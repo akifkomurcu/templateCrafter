@@ -36,6 +36,17 @@ export function Viewport() {
   const isSpacePressedRef = useRef(false);
   const panStartRef = useRef({ x: 0, y: 0 });
 
+  const clampPan = useCallback((x: number, y: number) => {
+    const vp = viewportRef.current;
+    if (!vp) return { x, y };
+    const maxX = vp.clientWidth * 1.5;
+    const maxY = vp.clientHeight * 1.5;
+    return {
+      x: Math.max(-maxX, Math.min(maxX, x)),
+      y: Math.max(-maxY, Math.min(maxY, y)),
+    };
+  }, []);
+
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
@@ -67,13 +78,14 @@ export function Viewport() {
         setCanvasScale(currentScale - e.deltaY * 0.001);
       } else {
         const { canvasPanX, canvasPanY } = useAppStore.getState();
-        setCanvasPan(canvasPanX - e.deltaX, canvasPanY - e.deltaY);
+        const { x, y } = clampPan(canvasPanX - e.deltaX, canvasPanY - e.deltaY);
+        setCanvasPan(x, y);
       }
     };
 
     viewport.addEventListener('wheel', handleWheel, { passive: false });
     return () => viewport.removeEventListener('wheel', handleWheel);
-  }, [setCanvasScale, setCanvasPan]);
+  }, [setCanvasScale, setCanvasPan, clampPan]);
 
   useEffect(() => {
     // ── Space key for panning ────────────────────────────────
@@ -205,7 +217,8 @@ export function Viewport() {
         panStartRef.current = { x: e.clientX, y: e.clientY };
 
         const { canvasPanX, canvasPanY } = useAppStore.getState();
-        setCanvasPan(canvasPanX + dx, canvasPanY + dy);
+        const { x, y } = clampPan(canvasPanX + dx, canvasPanY + dy);
+        setCanvasPan(x, y);
         return;
       }
 
@@ -324,7 +337,7 @@ export function Viewport() {
     };
   }, [
     setActiveSlide, setDraggingElement, clearDraggingElement,
-    setSnapGuides, updateSlide, setDraggingSticker, setCanvasPan,
+    setSnapGuides, updateSlide, setDraggingSticker, setCanvasPan, clampPan,
   ]);
 
   const preset = DEVICE_PRESETS[devicePreset];
@@ -333,27 +346,52 @@ export function Viewport() {
   const displayW = baseH * aspectRatio;
 
   return (
-    <div id="slides-viewport" ref={viewportRef}>
+    <div className="flex-1 flex flex-col relative bg-background-light dark:bg-background-dark canvas-grid overflow-hidden" ref={viewportRef}>
       <div
+        className="flex-1 flex items-start justify-start p-24 gap-12 overflow-auto custom-scrollbar"
         id="canvas-transform-root"
         style={{
           transform: `translate(${canvasPanX}px, ${canvasPanY}px) scale(${canvasScale})`,
-          transformOrigin: 'center center',
+          transformOrigin: 'top left', // Better for row expansion
         }}
       >
-        {slides.map((_, index) => (
-          <div
-            key={index}
-            className={`slide-canvas-wrapper${index === activeSlideIndex ? ' active' : ''}`}
-            data-slide-index={index}
-            style={{ width: displayW, height: baseH }}
-          >
-            <SlideCanvas
-              slideIndex={index}
-              onHitRegionsUpdate={onHitRegionsUpdate}
-            />
-          </div>
-        ))}
+        <div className="flex items-center gap-12 min-w-max">
+          {slides.map((_, index) => (
+            <div
+              key={index}
+              className={`slide-canvas-wrapper relative flex-shrink-0 transition-all duration-500 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] rounded-[3rem] overflow-hidden ${
+                index === activeSlideIndex
+                  ? 'ring-4 ring-primary ring-offset-8 ring-offset-background-light dark:ring-offset-background-dark scale-100'
+                  : 'opacity-80 scale-95 grayscale-[20%] hover:grayscale-0 hover:scale-[0.98] hover:opacity-100'
+              }`}
+              data-slide-index={index}
+              style={{ width: displayW, height: baseH }}
+            >
+              <SlideCanvas
+                slideIndex={index}
+                onHitRegionsUpdate={onHitRegionsUpdate}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="absolute bottom-6 right-6 flex items-center bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-full shadow-lg p-1.5 gap-2 transition-colors duration-200">
+        <button 
+          className="w-8 h-8 flex items-center justify-center text-stone-500 hover:text-stone-800 dark:hover:text-white hover:bg-sage-100 dark:hover:bg-panel-dark rounded-full transition-colors"
+          onClick={() => setCanvasScale(canvasScale - 0.1)}
+        >
+          <span className="material-icons-round text-sm">remove</span>
+        </button>
+        <span className="px-1 text-xs font-bold text-stone-600 dark:text-stone-300 min-w-[2.5rem] text-center font-mono">
+          {Math.round(canvasScale * 100)}%
+        </span>
+        <button 
+          className="w-8 h-8 flex items-center justify-center text-stone-500 hover:text-stone-800 dark:hover:text-white hover:bg-sage-100 dark:hover:bg-panel-dark rounded-full transition-colors"
+          onClick={() => setCanvasScale(canvasScale + 0.1)}
+        >
+          <span className="material-icons-round text-sm">add</span>
+        </button>
       </div>
     </div>
   );

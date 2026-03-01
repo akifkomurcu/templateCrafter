@@ -11,17 +11,16 @@ export function Editor() {
   useKeyboardShortcuts();
 
   return (
-    <div id="app" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div className="h-screen flex flex-col overflow-hidden bg-background-light dark:bg-background-dark transition-colors duration-200">
       <Topbar />
-      <main className="editor">
+      <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <div className="editor-main">
+        <main className="flex-1 flex flex-col relative min-w-0">
           <SlideStrip />
           <Viewport />
           <FloatingToolbar />
-          <ZoomIndicator />
-        </div>
-      </main>
+        </main>
+      </div>
       <ExportModal />
     </div>
   );

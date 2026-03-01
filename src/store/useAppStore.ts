@@ -81,9 +81,14 @@ export interface AppStoreState {
   snapToCenterY: boolean;
   undoStack: string[];
   redoStack: string[];
+  isSlideStripPinned: boolean;
 
   // Export modal open state
   exportModalOpen: boolean;
+
+  // Theme
+  darkMode: boolean;
+  toggleDarkMode: () => void;
 
   // Actions
   addSlide: () => void;
@@ -93,6 +98,7 @@ export interface AppStoreState {
   setActiveSlide: (index: number) => void;
   updateSlide: (index: number, patch: Partial<SlideData>) => void;
   updateActiveSlide: (patch: Partial<SlideData>) => void;
+  updateAllSlides: (patch: Partial<SlideData>) => void;
 
   setDevicePreset: (preset: string) => void;
   setDeviceColor: (color: string) => void;
@@ -119,6 +125,7 @@ export interface AppStoreState {
 
   loadScreenshot: (slideIndex: number, file: File) => void;
   setExportModalOpen: (open: boolean) => void;
+  toggleSlideStripPinned: () => void;
 }
 
 // ============================================================
@@ -150,6 +157,18 @@ export const useAppStore = create<AppStoreState>((set, get) => ({
   undoStack: [],
   redoStack: [],
   exportModalOpen: false,
+  darkMode: false,
+  isSlideStripPinned: true,
+
+  toggleDarkMode: () => {
+    set((s) => {
+      const next = !s.darkMode;
+      if (next) document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', next ? 'dark' : 'light');
+      return { darkMode: next };
+    });
+  },
 
   // ──────────────────────────────────────────────────────────
   // Slide management
@@ -225,6 +244,11 @@ export const useAppStore = create<AppStoreState>((set, get) => ({
     const { activeSlideIndex, updateSlide } = get();
     updateSlide(activeSlideIndex, patch);
   },
+
+  updateAllSlides: (patch) =>
+    set((s) => ({
+      slides: s.slides.map((slide) => ({ ...slide, ...patch })),
+    })),
 
   // ──────────────────────────────────────────────────────────
   // Device / global settings
@@ -355,4 +379,6 @@ export const useAppStore = create<AppStoreState>((set, get) => ({
   // Export modal
   // ──────────────────────────────────────────────────────────
   setExportModalOpen: (open) => set({ exportModalOpen: open }),
+
+  toggleSlideStripPinned: () => set((s) => ({ isSlideStripPinned: !s.isSlideStripPinned })),
 }));

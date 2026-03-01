@@ -77,7 +77,7 @@ export function SlideThumb({ index }: SlideThumbProps) {
 
   return (
     <div
-      className={`slide-thumb${isActive ? ' active' : ''}${dragOver === 'left' ? ' drag-over-left' : ''}${dragOver === 'right' ? ' drag-over-right' : ''}`}
+      className={`group relative flex-shrink-0 flex flex-col items-center gap-2 cursor-pointer transition-all duration-300 ${isActive ? 'opacity-100 scale-105' : 'opacity-60 hover:opacity-100'}`}
       data-slide-index={index}
       draggable
       onDragStart={(e) => {
@@ -90,48 +90,36 @@ export function SlideThumb({ index }: SlideThumbProps) {
       onDrop={handleDrop}
       onClick={() => setActiveSlide(index)}
     >
-      {/* Hidden full-res canvas drives thumbnail via onDrawn */}
-      <div style={{ display: 'none' }}>
-        <SlideCanvas slideIndex={index} onDrawn={handleDrawn} />
+      <div className={`w-16 h-24 rounded-xl border-2 overflow-hidden relative shadow-lg transform transition-all duration-300 ${isActive ? 'border-primary' : 'border-transparent hover:border-stone-300 dark:hover:border-stone-500'}`}>
+        {/* Hidden full-res canvas drives thumbnail via onDrawn */}
+        <div style={{ display: 'none' }}>
+          <SlideCanvas slideIndex={index} onDrawn={handleDrawn} />
+        </div>
+        <canvas ref={thumbCanvasRef} width={thumbW} height={thumbH} className="w-full h-full object-cover" />
+        <div className="absolute inset-x-2 top-3 bottom-0 bg-stone-800 rounded-t-sm opacity-5 pointer-events-none"></div>
       </div>
 
-      <canvas ref={thumbCanvasRef} width={thumbW} height={thumbH} />
+      <span className={`absolute bottom-0 left-0 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-serif font-bold shadow-sm z-10 transition-colors ${isActive ? 'bg-primary' : 'bg-stone-600'}`}>
+        {index + 1}
+      </span>
 
-      <div className="slide-thumb__actions">
+      <div className="absolute -right-2 top-0 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-20">
         {slides.length > 1 && (
           <button
-            className="action-dot action-dot--delete"
+            className="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform"
             title="Delete"
             onClick={(e) => { e.stopPropagation(); deleteSlide(index); }}
           >
-            <span className="material-symbols-rounded">close</span>
+            <span className="material-icons-round text-xs">close</span>
           </button>
         )}
         <button
-          className="action-dot action-dot--duplicate"
+          className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform"
           title="Duplicate"
           onClick={(e) => { e.stopPropagation(); duplicateSlide(index); }}
         >
-          <span className="material-symbols-rounded">content_copy</span>
+          <span className="material-icons-round text-xs">content_copy</span>
         </button>
-        {index > 0 && (
-          <button
-            className="action-dot action-dot--move-left"
-            title="Move Left"
-            onClick={(e) => { e.stopPropagation(); moveSlide(index, index - 1); }}
-          >
-            <span className="material-symbols-rounded">chevron_left</span>
-          </button>
-        )}
-        {index < slides.length - 1 && (
-          <button
-            className="action-dot action-dot--move-right"
-            title="Move Right"
-            onClick={(e) => { e.stopPropagation(); moveSlide(index, index + 1); }}
-          >
-            <span className="material-symbols-rounded">chevron_right</span>
-          </button>
-        )}
       </div>
     </div>
   );
